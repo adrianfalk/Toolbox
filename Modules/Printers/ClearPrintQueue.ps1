@@ -1,4 +1,4 @@
-$Tool = @{
+﻿$Tool = @{
     Name          = "Clear Print Queue"
     Category      = "Printers"
     Description   = "Stops the print spooler and clears all stuck print jobs"

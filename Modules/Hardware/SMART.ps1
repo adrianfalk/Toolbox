@@ -1,4 +1,4 @@
-$Tool = @{
+﻿$Tool = @{
     Name          = "Disk SMART Status"
     Category      = "Hardware"
     Description   = "Shows SMART health status for all physical disks"

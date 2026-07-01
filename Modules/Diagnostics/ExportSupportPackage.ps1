@@ -1,4 +1,4 @@
-$Tool = @{
+﻿$Tool = @{
     Name          = "Export Support Package"
     Category      = "Diagnostics"
     Description   = "Collects system info, event logs and MSINFO32 into a ZIP for support"

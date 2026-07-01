@@ -1,4 +1,4 @@
-$Tool = @{
+﻿$Tool = @{
     Name          = "Ping Default Gateway"
     Category      = "Network"
     Description   = "Pings the default gateway to check local connectivity"

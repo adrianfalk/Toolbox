@@ -1,4 +1,4 @@
-$Tool = @{
+﻿$Tool = @{
     Name          = "Clear Teams Cache"
     Category      = "Microsoft 365"
     Description   = "Closes Teams and clears its local cache folders"

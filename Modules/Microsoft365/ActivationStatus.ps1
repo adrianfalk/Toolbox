@@ -1,4 +1,4 @@
-$Tool = @{
+﻿$Tool = @{
     Name          = "Office Activation Status"
     Category      = "Microsoft 365"
     Description   = "Shows the activation status of installed Office products"

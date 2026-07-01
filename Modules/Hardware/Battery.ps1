@@ -1,4 +1,4 @@
-$Tool = @{
+﻿$Tool = @{
     Name          = "Battery Report"
     Category      = "Hardware"
     Description   = "Generates a battery health report (laptops only)"

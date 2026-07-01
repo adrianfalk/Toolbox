@@ -1,4 +1,4 @@
-$Tool = @{
+﻿$Tool = @{
     Name          = "Open Company Portal"
     Category      = "Intune"
     Description   = "Launches the Company Portal app for compliance/device details"

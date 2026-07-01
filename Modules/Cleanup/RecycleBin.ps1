@@ -1,4 +1,4 @@
-$Tool = @{
+﻿$Tool = @{
     Name          = "Empty Recycle Bin"
     Category      = "Maintenance"
     Description   = "Empties the Recycle Bin for all drives"

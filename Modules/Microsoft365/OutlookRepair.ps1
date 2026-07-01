@@ -1,4 +1,4 @@
-$Tool = @{
+﻿$Tool = @{
     Name          = "Reset Outlook Profile Cache"
     Category      = "Microsoft 365"
     Description   = "Closes Outlook and clears the local navigation pane cache"

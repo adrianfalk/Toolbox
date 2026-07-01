@@ -22,13 +22,28 @@ function Show-TeraSelectMenu {
     $filter = ""
     $allItems = $Items
 
+    # Redrawing via Clear-Host on every keypress flashes the whole screen blank
+    # before repainting it, and the header used to also recompute system info
+    # plus a network ping on every single render - that's the real source of
+    # the "lag". Get-CachedSystemSummary fixes the slowness; for the flicker,
+    # we clear once up front and then on every later frame just jump the
+    # cursor back to the top and reprint, using the terminal's own "erase from
+    # cursor to end of screen" so leftover old lines vanish without a blank flash.
+    Clear-Host
+    $esc = [char]27
+    $cursorHome = "$esc[H"
+    $eraseToEnd = "$esc[0J"
+    $firstFrame = $true
+
     while ($true) {
         $displayItems = if ($filter) { Search-Toolbox -Tools $allItems -Query $filter } else { $allItems }
         if ($displayItems.Count -eq 0) { $displayItems = $allItems }
         if ($selected -ge $displayItems.Count) { $selected = $displayItems.Count - 1 }
         if ($selected -lt 0) { $selected = 0 }
 
-        Write-TeraHeader -Root $Global:TeraRoot
+        if ($firstFrame) { $firstFrame = $false } else { Write-Host $cursorHome -NoNewline }
+
+        Write-TeraHeader -Root $Global:TeraRoot -NoClear
         if ($Title) {
             Write-TeraLine $Title -Color $Global:TeraTheme.Accent
             Write-TeraLine ""
@@ -51,6 +66,7 @@ function Show-TeraSelectMenu {
         $hint = "Up/Down: navigate | Enter: select | Esc: back"
         if ($AllowSearch) { $hint += " | /: search" }
         Write-TeraLine $hint -Color $Global:TeraTheme.Muted
+        Write-Host $eraseToEnd -NoNewline
 
         $key = Read-KeyPress
         switch ($key.Key) {

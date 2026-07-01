@@ -1,4 +1,4 @@
-$Tool = @{
+﻿$Tool = @{
     Name          = "Intune Sync"
     Category      = "Intune"
     Description   = "Triggers an immediate Intune device policy sync"

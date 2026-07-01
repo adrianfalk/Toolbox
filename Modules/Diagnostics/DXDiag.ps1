@@ -1,4 +1,4 @@
-$Tool = @{
+﻿$Tool = @{
     Name          = "DirectX Diagnostics"
     Category      = "Diagnostics"
     Description   = "Runs DXDiag and saves a report to the desktop"

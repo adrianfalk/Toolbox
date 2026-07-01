@@ -1,4 +1,4 @@
-$Tool = @{
+﻿$Tool = @{
     Name          = "List Installed Printers"
     Category      = "Printers"
     Description   = "Shows all installed printers and their status"

@@ -1,4 +1,4 @@
-$Tool = @{
+﻿$Tool = @{
     Name          = "Check Windows Update"
     Category      = "Windows"
     Description   = "Checks for and lists available Windows updates"

@@ -1,4 +1,4 @@
-$Tool = @{
+﻿$Tool = @{
     Name          = "Flush DNS"
     Category      = "Network"
     Description   = "Clears the local DNS resolver cache"

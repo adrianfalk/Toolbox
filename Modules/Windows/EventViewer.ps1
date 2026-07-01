@@ -1,4 +1,4 @@
-$Tool = @{
+﻿$Tool = @{
     Name          = "Recent System Errors"
     Category      = "Windows"
     Description   = "Shows the 25 most recent System log errors"

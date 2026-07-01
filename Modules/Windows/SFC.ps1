@@ -1,4 +1,4 @@
-$Tool = @{
+﻿$Tool = @{
     Name          = "System File Checker (SFC)"
     Category      = "Windows"
     Description   = "Scans and repairs protected Windows system files"

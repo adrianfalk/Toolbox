@@ -1,4 +1,4 @@
-$Tool = @{
+﻿$Tool = @{
     Name          = "Azure AD Join Status (dsregcmd)"
     Category      = "Intune"
     Description   = "Shows device join/registration status with Azure AD"

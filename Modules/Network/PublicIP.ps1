@@ -1,4 +1,4 @@
-$Tool = @{
+﻿$Tool = @{
     Name          = "Show Public IP"
     Category      = "Network"
     Description   = "Retrieves the current public IP address"

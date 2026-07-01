@@ -1,4 +1,4 @@
-$Tool = @{
+﻿$Tool = @{
     Name          = "DISM Restore Health"
     Category      = "Windows"
     Description   = "Repairs the Windows component store using DISM"

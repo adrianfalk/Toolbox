@@ -1,4 +1,4 @@
-$Tool = @{
+﻿$Tool = @{
     Name          = "DHCP Renew"
     Category      = "Network"
     Description   = "Releases and renews the DHCP lease on all adapters"

@@ -1,4 +1,4 @@
-$Tool = @{
+﻿$Tool = @{
     Name          = "CPU / RAM / BIOS Overview"
     Category      = "Hardware"
     Description   = "Displays a summary of CPU, RAM and BIOS information"

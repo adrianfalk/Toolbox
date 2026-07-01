@@ -1,4 +1,4 @@
-$Tool = @{
+﻿$Tool = @{
     Name          = "Clean Temp Files"
     Category      = "Maintenance"
     Description   = "Removes files from the user and system Temp folders"

@@ -46,14 +46,28 @@ function Write-TeraBox {
     Write-TeraLine ("+" + ("-" * ($width - 2)) + "+") -Color $BorderColor
 }
 
+function Get-CachedSystemSummary {
+    # Get-SystemSummary runs a CIM query and a network ping - too slow to redo
+    # on every single keypress inside the menu loop. Refresh it periodically
+    # instead of on every render.
+    $now = Get-Date
+    if (-not $Global:TeraSystemSummaryCache -or
+        -not $Global:TeraSystemSummaryStamp -or
+        ($now - $Global:TeraSystemSummaryStamp).TotalSeconds -gt 30) {
+        $Global:TeraSystemSummaryCache = Get-SystemSummary
+        $Global:TeraSystemSummaryStamp = $now
+    }
+    return $Global:TeraSystemSummaryCache
+}
+
 function Write-TeraHeader {
-    param([string]$Root)
-    Clear-Host
+    param([string]$Root, [switch]$NoClear)
+    if (-not $NoClear) { Clear-Host }
     $logoPath = Join-Path $Root "Assets\Logo.txt"
     if (Test-Path $logoPath) {
         Write-TeraLine (Get-Content $logoPath -Raw -Encoding UTF8) -Color $Global:TeraTheme.Primary
     }
-    $sys = Get-SystemSummary
+    $sys = Get-CachedSystemSummary
     $onlineText = if ($sys.Online) { "Online" } else { "Offline" }
     $onlineColor = if ($sys.Online) { $Global:TeraTheme.Success } else { $Global:TeraTheme.Error }
     $adminText = if ($sys.IsAdmin) { "Yes" } else { "No" }
