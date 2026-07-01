@@ -10,6 +10,14 @@ param(
 
 $Global:TeraRoot = $Root
 
+# Without this, Windows PowerShell renders the box-drawing/emoji glyphs used
+# in the logo and icons as mojibake, since the console defaults to the
+# system's legacy codepage rather than UTF-8.
+try {
+    [Console]::OutputEncoding = [System.Text.Encoding]::UTF8
+    $OutputEncoding = [System.Text.Encoding]::UTF8
+} catch { }
+
 Import-Module (Join-Path $Root "Core\Helpers.psm1") -Force
 
 . (Join-Path $Root "Core\Theme.ps1")

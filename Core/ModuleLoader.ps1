@@ -13,16 +13,16 @@ function Get-Toolbox {
     Get-ChildItem -Path $modulesPath -Filter "*.ps1" -Recurse | ForEach-Object {
         $file = $_
         try {
-            $tokens = $null
-            $errors = $null
-            $ast = [System.Management.Automation.Language.Parser]::ParseFile($file.FullName, [ref]$tokens, [ref]$errors)
+            $sb = [scriptblock]::Create((Get-Content -LiteralPath $file.FullName -Raw -Encoding UTF8))
+            $assignments = $sb.Ast.FindAll({ $args[0] -is [System.Management.Automation.Language.AssignmentStatementAst] -and $args[0].Left.VariablePath.UserPath -eq "Tool" }, $true)
 
-            $sb = [scriptblock]::Create((Get-Content $file.FullName -Raw))
-            $variables = $sb.Ast.FindAll({ $args[0] -is [System.Management.Automation.Language.AssignmentStatementAst] -and $args[0].Left.VariablePath.UserPath -eq "Tool" }, $true)
-
-            if ($variables.Count -gt 0) {
-                $hashAst = $variables[0].Right
-                $toolData = $hashAst.SafeGetValue()
+            if ($assignments.Count -gt 0) {
+                # Evaluate just the hashtable literal's own source text as an isolated
+                # scriptblock. SafeGetValue() rejects boolean/variable-bearing hashtables
+                # as "dynamic expressions", so we invoke the literal directly instead -
+                # it's our own trusted module metadata, not untrusted input.
+                $hashText = $assignments[0].Right.Extent.Text
+                $toolData = & ([scriptblock]::Create($hashText))
 
                 if ($toolData -and -not $toolData.Hidden) {
                     $tools += [PSCustomObject]@{

@@ -51,7 +51,7 @@ function Write-TeraHeader {
     Clear-Host
     $logoPath = Join-Path $Root "Assets\Logo.txt"
     if (Test-Path $logoPath) {
-        Write-TeraLine (Get-Content $logoPath -Raw) -Color $Global:TeraTheme.Primary
+        Write-TeraLine (Get-Content $logoPath -Raw -Encoding UTF8) -Color $Global:TeraTheme.Primary
     }
     $sys = Get-SystemSummary
     $onlineText = if ($sys.Online) { "Online" } else { "Offline" }
