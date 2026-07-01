@@ -11,13 +11,19 @@
 
 $RepoRawBaseUrl = "https://raw.githubusercontent.com/ecit/toolbox/main"
 $RepoZipUrl     = "https://github.com/ecit/toolbox/archive/refs/heads/main.zip"
-$InstallDir     = Join-Path $env:LOCALAPPDATA "Toolbox"
+
+# [Environment]::GetFolderPath / GetTempPath resolve real long paths.
+# $env:LOCALAPPDATA / $env:TEMP can return a broken 8.3 short-name alias
+# (e.g. ADRIAN~1.FAL) on accounts whose username contains a dot, which then
+# fails with "path does not exist" even though the real folder is fine.
+$InstallDir = Join-Path ([Environment]::GetFolderPath('LocalApplicationData')) "Toolbox"
 
 function Sync-ToolboxSource {
     param([string]$Destination, [string]$ZipUrl)
 
-    $tempZip = Join-Path $env:TEMP "toolbox_bootstrap.zip"
-    $tempExtract = Join-Path $env:TEMP "toolbox_bootstrap"
+    $tempRoot = [System.IO.Path]::GetTempPath()
+    $tempZip = Join-Path $tempRoot "toolbox_bootstrap.zip"
+    $tempExtract = Join-Path $tempRoot "toolbox_bootstrap"
 
     Write-Host "Fetching Toolbox..." -ForegroundColor Cyan
 
@@ -27,6 +33,9 @@ function Sync-ToolboxSource {
     Expand-Archive -Path $tempZip -DestinationPath $tempExtract -Force
 
     $sourceDir = Get-ChildItem $tempExtract -Directory | Select-Object -First 1
+    if (-not $sourceDir) {
+        throw "Downloaded archive did not contain the expected folder structure."
+    }
 
     if (-not (Test-Path $Destination)) {
         New-Item -ItemType Directory -Path $Destination -Force | Out-Null

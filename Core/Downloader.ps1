@@ -34,14 +34,18 @@ function Update-Toolbox {
 
     try {
         $zipUrl = "$RepoRawBaseUrl/../archive/refs/heads/main.zip"
-        $tempZip = Join-Path $env:TEMP "toolbox_update.zip"
-        $tempExtract = Join-Path $env:TEMP "toolbox_update"
+        $tempRoot = [System.IO.Path]::GetTempPath()
+        $tempZip = Join-Path $tempRoot "toolbox_update.zip"
+        $tempExtract = Join-Path $tempRoot "toolbox_update"
 
         Invoke-WebRequest -Uri $zipUrl -OutFile $tempZip -ErrorAction Stop
         if (Test-Path $tempExtract) { Remove-Item $tempExtract -Recurse -Force }
         Expand-Archive -Path $tempZip -DestinationPath $tempExtract -Force
 
         $sourceDir = Get-ChildItem $tempExtract -Directory | Select-Object -First 1
+        if (-not $sourceDir) {
+            throw "Downloaded archive did not contain the expected folder structure."
+        }
         Copy-Item -Path (Join-Path $sourceDir.FullName "*") -Destination $Root -Recurse -Force
 
         Remove-Item $tempZip -Force -ErrorAction SilentlyContinue
