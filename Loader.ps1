@@ -9,7 +9,7 @@
     logic lives in Core/ and Modules/, which are pulled from the repo below.
 #>
 
-$RepoRawBaseUrl = "https://raw.githubusercontent.com/ecit/toolbox/main"
+$RepoRawBaseUrl = "https://raw.githubusercontent.com/adrianfalk/toolbox/main"
 $RepoZipUrl     = "https://github.com/ecit/toolbox/archive/refs/heads/main.zip"
 $InstallDir     = Join-Path $env:LOCALAPPDATA "Toolbox"
 
