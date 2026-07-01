@@ -9,6 +9,7 @@
     logic lives in Core/ and Modules/, which are pulled from the repo below.
 #>
 
+<<<<<<< HEAD
 $RepoRawBaseUrl = "https://raw.githubusercontent.com/ecit/toolbox/main"
 $RepoZipUrl     = "https://github.com/ecit/toolbox/archive/refs/heads/main.zip"
 
@@ -17,6 +18,11 @@ $RepoZipUrl     = "https://github.com/ecit/toolbox/archive/refs/heads/main.zip"
 # (e.g. ADRIAN~1.FAL) on accounts whose username contains a dot, which then
 # fails with "path does not exist" even though the real folder is fine.
 $InstallDir = Join-Path ([Environment]::GetFolderPath('LocalApplicationData')) "Toolbox"
+=======
+$RepoRawBaseUrl = "https://raw.githubusercontent.com/adrianfalk/toolbox/main"
+$RepoZipUrl     = "https://github.com/adrianfalk/toolbox/archive/refs/heads/main.zip"
+$InstallDir     = Join-Path $env:LOCALAPPDATA "Toolbox"
+>>>>>>> 72cce34e23d9664db55bc96c1a1f3c6942fc4549
 
 function Sync-ToolboxSource {
     param([string]$Destination, [string]$ZipUrl)
