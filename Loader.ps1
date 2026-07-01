@@ -12,16 +12,20 @@
 $RepoRawBaseUrl = "https://raw.githubusercontent.com/adrianfalk/toolbox/main"
 $RepoZipUrl     = "https://github.com/adrianfalk/toolbox/archive/refs/heads/main.zip"
 
-# [Environment]::GetFolderPath / GetTempPath resolve real long paths.
-# $env:LOCALAPPDATA / $env:TEMP can return a broken 8.3 short-name alias
-# (e.g. ADRIAN~1.FAL) on accounts whose username contains a dot, which then
-# fails with "path does not exist" even though the real folder is fine.
-$InstallDir = Join-Path ([Environment]::GetFolderPath('LocalApplicationData')) "Toolbox"
+# Deliberately avoid any per-user path (LOCALAPPDATA, TEMP, USERPROFILE, ...).
+# On accounts whose Windows profile was provisioned with a dotted username,
+# the profile's registry entry (and every API built on top of it - env vars,
+# [Environment]::GetFolderPath, [IO.Path]::GetTempPath) can point at an 8.3
+# short-name alias (e.g. ADRIAN~1.FAL) that doesn't actually exist on disk
+# when 8dot3 name creation is disabled on the volume. %ProgramData% is a
+# fixed OS path with no username in it, so it isn't affected.
+$InstallDir = Join-Path $env:ProgramData "Toolbox"
 
 function Sync-ToolboxSource {
     param([string]$Destination, [string]$ZipUrl)
 
-    $tempRoot = [System.IO.Path]::GetTempPath()
+    $tempRoot = Join-Path $env:ProgramData "Toolbox_tmp"
+    if (-not (Test-Path $tempRoot)) { New-Item -ItemType Directory -Path $tempRoot -Force | Out-Null }
     $tempZip = Join-Path $tempRoot "toolbox_bootstrap.zip"
     $tempExtract = Join-Path $tempRoot "toolbox_bootstrap"
 
@@ -44,6 +48,7 @@ function Sync-ToolboxSource {
 
     Remove-Item $tempZip -Force -ErrorAction SilentlyContinue
     Remove-Item $tempExtract -Recurse -Force -ErrorAction SilentlyContinue
+    Remove-Item $tempRoot -Recurse -Force -ErrorAction SilentlyContinue
 }
 
 try {

@@ -34,7 +34,10 @@ function Update-Toolbox {
 
     try {
         $zipUrl = "$RepoRawBaseUrl/../archive/refs/heads/main.zip"
-        $tempRoot = [System.IO.Path]::GetTempPath()
+        # Use %ProgramData% rather than the per-user temp path - see Loader.ps1
+        # for why user-profile-based paths can break on dotted usernames.
+        $tempRoot = Join-Path $env:ProgramData "Toolbox_tmp"
+        if (-not (Test-Path $tempRoot)) { New-Item -ItemType Directory -Path $tempRoot -Force | Out-Null }
         $tempZip = Join-Path $tempRoot "toolbox_update.zip"
         $tempExtract = Join-Path $tempRoot "toolbox_update"
 
@@ -50,6 +53,7 @@ function Update-Toolbox {
 
         Remove-Item $tempZip -Force -ErrorAction SilentlyContinue
         Remove-Item $tempExtract -Recurse -Force -ErrorAction SilentlyContinue
+        Remove-Item $tempRoot -Recurse -Force -ErrorAction SilentlyContinue
 
         Write-TeraLog -Message "Updated from $CurrentVersion to $latest" -Level "SUCCESS"
         return $true
