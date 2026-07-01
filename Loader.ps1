@@ -10,7 +10,7 @@
 #>
 
 $RepoRawBaseUrl = "https://raw.githubusercontent.com/adrianfalk/toolbox/main"
-$RepoZipUrl     = "https://github.com/ecit/toolbox/archive/refs/heads/main.zip"
+$RepoZipUrl     = "https://github.com/adrianfalk/toolbox/archive/refs/heads/main.zip"
 $InstallDir     = Join-Path $env:LOCALAPPDATA "Toolbox"
 
 function Sync-ToolboxSource {
