@@ -1,0 +1,9 @@
+{
+  "AppName": "Toolbox",
+  "Version": "1.0.0",
+  "RepoRawBaseUrl": "https://raw.githubusercontent.com/ecit/toolbox/main",
+  "RepoApiUrl": "https://api.github.com/repos/ecit/toolbox",
+  "UpdateCheck": true,
+  "CacheDir": "Cache",
+  "LogDir": "Logs"
+}

@@ -1,0 +1,12 @@
+{
+  "Name": "TeraDark",
+  "Primary": "Cyan",
+  "Accent": "Magenta",
+  "Success": "Green",
+  "Warning": "Yellow",
+  "Error": "Red",
+  "Muted": "DarkGray",
+  "Text": "White",
+  "Border": "DarkCyan",
+  "Highlight": "Black"
+}

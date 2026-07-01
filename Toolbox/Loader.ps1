@@ -1,0 +1,52 @@
+<#
+.SYNOPSIS
+    Toolbox bootstrap loader. This is the ONLY file end users need to fetch via:
+        irm https://tools.ecit.com | iex
+
+.DESCRIPTION
+    Downloads/refreshes the full Toolbox framework into a local cache folder
+    and launches it. This file should change as rarely as possible - all real
+    logic lives in Core/ and Modules/, which are pulled from the repo below.
+#>
+
+$RepoRawBaseUrl = "https://raw.githubusercontent.com/ecit/toolbox/main"
+$RepoZipUrl     = "https://github.com/ecit/toolbox/archive/refs/heads/main.zip"
+$InstallDir     = Join-Path $env:LOCALAPPDATA "Toolbox"
+
+function Sync-ToolboxSource {
+    param([string]$Destination, [string]$ZipUrl)
+
+    $tempZip = Join-Path $env:TEMP "toolbox_bootstrap.zip"
+    $tempExtract = Join-Path $env:TEMP "toolbox_bootstrap"
+
+    Write-Host "Fetching Toolbox..." -ForegroundColor Cyan
+
+    Invoke-WebRequest -Uri $ZipUrl -OutFile $tempZip -UseBasicParsing -ErrorAction Stop
+
+    if (Test-Path $tempExtract) { Remove-Item $tempExtract -Recurse -Force }
+    Expand-Archive -Path $tempZip -DestinationPath $tempExtract -Force
+
+    $sourceDir = Get-ChildItem $tempExtract -Directory | Select-Object -First 1
+
+    if (-not (Test-Path $Destination)) {
+        New-Item -ItemType Directory -Path $Destination -Force | Out-Null
+    }
+    Copy-Item -Path (Join-Path $sourceDir.FullName "*") -Destination $Destination -Recurse -Force
+
+    Remove-Item $tempZip -Force -ErrorAction SilentlyContinue
+    Remove-Item $tempExtract -Recurse -Force -ErrorAction SilentlyContinue
+}
+
+try {
+    Sync-ToolboxSource -Destination $InstallDir -ZipUrl $RepoZipUrl
+
+    $entryPoint = Join-Path $InstallDir "Start-Toolbox.ps1"
+    if (-not (Test-Path $entryPoint)) {
+        throw "Entry point not found after sync: $entryPoint"
+    }
+
+    & $entryPoint -Root $InstallDir
+} catch {
+    Write-Host "Toolbox failed to start: $($_.Exception.Message)" -ForegroundColor Red
+    Write-Host "Check your internet connection and try again." -ForegroundColor Yellow
+}
