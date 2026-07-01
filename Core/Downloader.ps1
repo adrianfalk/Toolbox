@@ -49,6 +49,14 @@ function Update-Toolbox {
         if (-not $sourceDir) {
             throw "Downloaded archive did not contain the expected folder structure."
         }
+
+        # Wipe Core/Modules/Assets before copying the fresh versions in, so a
+        # module that was renamed or moved to a different category upstream
+        # doesn't leave a stale duplicate copy sitting next to the new one.
+        foreach ($dir in @("Core", "Modules", "Assets")) {
+            $path = Join-Path $Root $dir
+            if (Test-Path $path) { Remove-Item $path -Recurse -Force }
+        }
         Copy-Item -Path (Join-Path $sourceDir.FullName "*") -Destination $Root -Recurse -Force
 
         Remove-Item $tempZip -Force -ErrorAction SilentlyContinue

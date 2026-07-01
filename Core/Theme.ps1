@@ -61,8 +61,8 @@ function Get-CachedSystemSummary {
 }
 
 function Write-TeraHeader {
-    param([string]$Root, [switch]$NoClear)
-    if (-not $NoClear) { Clear-Host }
+    param([string]$Root)
+    Clear-Host
     $logoPath = Join-Path $Root "Assets\Logo.txt"
     if (Test-Path $logoPath) {
         Write-TeraLine (Get-Content $logoPath -Raw -Encoding UTF8) -Color $Global:TeraTheme.Primary

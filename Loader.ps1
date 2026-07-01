@@ -41,9 +41,14 @@ function Sync-ToolboxSource {
         throw "Downloaded archive did not contain the expected folder structure."
     }
 
-    if (-not (Test-Path $Destination)) {
-        New-Item -ItemType Directory -Path $Destination -Force | Out-Null
+    # Wipe the destination before copying, not just overwrite on top of it -
+    # otherwise files that were renamed or removed in the source (e.g. a
+    # module moved to a different category folder) linger forever as stale
+    # duplicates instead of following the rename.
+    if (Test-Path $Destination) {
+        Remove-Item $Destination -Recurse -Force
     }
+    New-Item -ItemType Directory -Path $Destination -Force | Out-Null
     Copy-Item -Path (Join-Path $sourceDir.FullName "*") -Destination $Destination -Recurse -Force
 
     Remove-Item $tempZip -Force -ErrorAction SilentlyContinue
